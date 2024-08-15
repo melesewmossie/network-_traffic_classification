@@ -1,4 +1,5 @@
 Network Topology Implementation
+
 A network topology was implemented using VirtualBox, consisting of five Virtual Machines (VMs): one Controller, one Layer 2 Switch, and three Hosts. The network was designed with VMs to introduce realistic network delays. Instead of using Mininet, which simulates the network within a single VM, an overlay network was deployed to ensure that traffic between hosts would pass through the Switch VM rather than using VirtualBox's internal switching mechanism.
 
 Each host was configured with Open vSwitch (OVS) and two network interfaces. The first interface was internal, while the second connected to the Switch VM using VXLAN tunneling. The Switch VM, also running OVS, had VXLAN interfaces connected to the hosts and a direct connection to the Controller VM using an underlay IP. The Ryu controller was deployed on the Controller VM to manage network traffic. Once the network was successfully deployed and configured, the controller could monitor the packets flowing through the switch between any of the hosts.
