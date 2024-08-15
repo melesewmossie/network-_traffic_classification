@@ -8,3 +8,27 @@ internal switching mechanism to communicate. The hosts in the network used OVS w
 The first interface was internal and the second connected towards the Switch VM OVS using VXLAN 
 tunnelling. The Switch OVS had VXLAN interfaces towards the hosts and connected to the Controller VM 
 directly (i.e. using underlay IP). The Ryu controller was deployed on the Controller VM. 
+
+After the network is successfully deployed and configured, the controller should be aware of packets 
+flowing through the switch between any of the hosts. The sample Python script, simple_monitor_13.py.
+
+Simulating Traffic Flows 
+The Distributed Internet Traffic Generator (D-ITG) application was used to generate the traffic flow data 
+used for training the Machine Learning models. D-ITG is described as ‘a platform capable to produce 
+IPv4 and IPv6 traffic by accurately replicating the workload of current Internet applications. D-ITG can 
+generate traffic following stochastic models for packet size (PS) and inter departure time (IDT) that 
+mimic application-level protocol behavior. D-ITG is able to replicate statistical properties of traffic of different well-known applications (e.g. Telnet, VoIP – G.711, G.723, G.729, Voice Activity Detection, 
+Compressed RTP – DNS, network games’ [1]. For the purposes of this proof of concept traffic 
+classification, the following traffic types were used: Ping, Telnet, DNS, Voice (G.711). The choice of traffic 
+classes was due to limitations in simulation tools and issues faced in using D-ITG as discussed further in 
+the Limitations and Future Work section.   
+
+For Ping traffic, a simple ‘ping’ command was run with the overlay IP of the destination host.  
+The process to collect training data for the models is as follows: First simulate the flow of the specific 
+traffic between a certain pair of hosts using D-ITG or other tools. Second, start the traffic_classifier.py 
+script with the appropriate options for training the traffic type. The script starts the Ryu controller and 
+simple_monitor_AK.py (the modified version of simple_monitor_13.py). The data generated from 
+simple monitor script is collected and transformed to update the attributes of a Flow object. The 
+attributes of the Flow object are then periodically outputted to a CSV file. After the CSV files for each 
+traffic type are generated, they are combined in a complete Pandas Dataframe object used for the 
+model training and testing. 
