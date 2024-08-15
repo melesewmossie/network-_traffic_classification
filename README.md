@@ -1,4 +1,5 @@
 General Instructions:
+
 Network Topology
 A network topology was implemented in VirtualBox with five VMs: one Controller, one Layer 2 Switch, and three Hosts. VMs introduced realistic network delays, and an overlay network was used to route traffic through the Switch VM, bypassing VirtualBox's internal switching. Each host used Open vSwitch (OVS) with VXLAN tunneling to connect to the Switch VM, which was linked directly to the Controller VM running the Ryu controller.
 
